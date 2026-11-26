@@ -1,0 +1,4 @@
+.env
+.smtp.env
+__pycache__/
+evidence/

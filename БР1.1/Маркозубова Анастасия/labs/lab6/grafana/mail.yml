@@ -1,0 +1,21 @@
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: Почта ЛР6
+    receivers:
+      - uid: lab6-mail
+        type: email
+        disableResolveMessage: false
+        settings:
+          addresses: $LAB6_ALERT_TO
+policies:
+  - orgId: 1
+    receiver: grafana-default-email
+    group_by: [alertname, service]
+    routes:
+      - receiver: Почта ЛР6
+        object_matchers:
+          - [project, '=', backend-lab6]
+        group_wait: 10s
+        group_interval: 1m
+        repeat_interval: 4h

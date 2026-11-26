@@ -1,0 +1,5 @@
+services:
+  grafana:
+    env_file: [.smtp.env]
+    volumes:
+      - ./grafana/mail.yml:/etc/grafana/provisioning/alerting/mail.yml:ro
