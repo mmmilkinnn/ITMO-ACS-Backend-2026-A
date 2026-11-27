@@ -7,7 +7,7 @@ Grafana показывает нагрузку ВМ, доступность ше�
 | CPU, RAM, диск и сеть | Node Exporter читает метрики ВМ, Prometheus опрашивает его каждые 15 секунд. Диск считается по корневому разделу. Сетевые счётчики суммируются без lo, Docker bridge и veth. |
 | Доступность | Blackbox Exporter делает GET /docs/ на каждом из шести сервисов. HTTP 200 отображается как UP. Эта проверка покрывает HTTP-доступность, а не все операции приложения. |
 | Журналы | Alloy читает stdout и stderr контейнеров через Docker API. Loki хранит записи три дня, Grafana фильтрует их по имени контейнера. Контейнер появляется в списке после первой записи. |
-| Оповещения | Шесть правил Grafana срабатывают, если проверка сервиса неуспешна в течение минуты. Настроенный почтовый контакт отправляет уведомления при отказе и при восстановлении. |
+| Состояние правил | Шесть правил Grafana срабатывают, если проверка сервиса неуспешна в течение минуты. Состояние правил видно в Grafana. |
 
 ## Доступ к Grafana
 
@@ -29,6 +29,6 @@ bash scripts/deploy.sh
 python3 scripts/verify.py
 ~~~
 
-Для Gmail задайте в GitHub Actions Secrets `LAB6_SMTP_USER`, `LAB6_SMTP_PASSWORD` и `LAB6_ALERT_TO`. Пароль приложения Google не хранится в репозитории. Workflow разворачивает конфигурацию и проверяет доступность источников данных, дашборда и правил.
+Workflow разворачивает конфигурацию и проверяет доступность источников данных, дашборда и правил.
 
-Источники: [Grafana Alloy](https://grafana.com/docs/grafana/latest/monitor/monitor-docker-containers/), [Loki](https://grafana.com/docs/loki/latest/setup/install/docker/), [настройка оповещений из файлов](https://grafana.com/docs/grafana/latest/alerting/set-up/provision-alerting-resources/file-provisioning/).
+Источники: [Grafana Alloy](https://grafana.com/docs/grafana/latest/monitor/monitor-docker-containers/), [Loki](https://grafana.com/docs/loki/latest/setup/install/docker/), [правила Grafana из файлов](https://grafana.com/docs/grafana/latest/alerting/set-up/provision-alerting-resources/file-provisioning/).

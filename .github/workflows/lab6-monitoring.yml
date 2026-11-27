@@ -42,18 +42,10 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
           ssh -o BatchMode=yes -o ConnectTimeout=20 -o ConnectionAttempts=3 "$DEPLOY_USER@$DEPLOY_HOST" 'hostname; free -m; df -h /; sudo -n docker network inspect backend-lab4_job-board-network >/dev/null'
       - name: Развернуть мониторинг
-        env:
-          SMTP_USER: ${{ secrets.LAB6_SMTP_USER }}
-          SMTP_PASSWORD: ${{ secrets.LAB6_SMTP_PASSWORD }}
-          ALERT_TO: ${{ secrets.LAB6_ALERT_TO }}
         run: |
           ssh=(ssh -o BatchMode=yes -o ConnectTimeout=20 -o ServerAliveInterval=15 "$DEPLOY_USER@$DEPLOY_HOST")
-          tar -cz -C "$SOURCE" compose.yaml compose.smtp.yaml blackbox.yml prometheus.yml loki.yml config.alloy grafana scripts | "${ssh[@]}" 'mkdir -p ~/backend-monitoring && tar -xz -C ~/backend-monitoring'
-          if [[ -n "$SMTP_USER" && -n "$SMTP_PASSWORD" && -n "$ALERT_TO" ]]; then
-            printf '%s\n' "$SMTP_USER" "$SMTP_PASSWORD" "$ALERT_TO" | "${ssh[@]}" 'bash ~/backend-monitoring/scripts/deploy.sh --smtp-from-stdin'
-          else
-            "${ssh[@]}" 'bash ~/backend-monitoring/scripts/deploy.sh'
-          fi
+          tar -cz -C "$SOURCE" compose.yaml blackbox.yml prometheus.yml loki.yml config.alloy grafana scripts | "${ssh[@]}" 'mkdir -p ~/backend-monitoring && tar -xz -C ~/backend-monitoring'
+          "${ssh[@]}" 'bash ~/backend-monitoring/scripts/deploy.sh'
       - name: Проверить дашборд, метрики и журналы
         run: |
           mkdir -p evidence

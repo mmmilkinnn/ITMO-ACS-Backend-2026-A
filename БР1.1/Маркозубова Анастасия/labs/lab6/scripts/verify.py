@@ -40,7 +40,7 @@ def verify():
     assert logs["data"]["result"], "No application logs in Loki"
     rules = api("/api/v1/provisioning/alert-rules")
     assert {r["labels"]["service"] for r in rules if r["uid"].startswith("lab6-health-")} == services
-    return {"collected_at_utc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()), "dashboard": dashboard["uid"], "metrics": metrics, "probes": probes, "containers_with_logs": len(log_containers), "application_containers_with_logs": len([c for c in log_containers if c.startswith("backend-lab4-")]), "alert_rules": len(services), "smtp_configured": (root / ".smtp.env").exists()}
+    return {"collected_at_utc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()), "dashboard": dashboard["uid"], "metrics": metrics, "probes": probes, "containers_with_logs": len(log_containers), "application_containers_with_logs": len([c for c in log_containers if c.startswith("backend-lab4-")]), "alert_rules": len(services)}
 
 for attempt in range(36):
     try:
